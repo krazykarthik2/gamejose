@@ -1,0 +1,117 @@
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 22em;
+  width: 90vw;
+}
+.row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.cell {
+  width: 2em;
+  height: 2em;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.cell.blank{
+  background: #0000;
+  border:none
+}
+.cell.player1 {
+  background-color: lightcoral;
+}
+
+.cell.player2 {
+  background-color: lightblue;
+}
+
+/* Define specific positions for each cell */
+.cell:nth-child(1) {
+  grid-area: a0;
+}
+.cell:nth-child(2) {
+  grid-area: a1;
+}
+.cell:nth-child(3) {
+  grid-area: a2;
+}
+.cell:nth-child(4) {
+  grid-area: a3;
+}
+.cell:nth-child(5) {
+  grid-area: a4;
+}
+.cell:nth-child(6) {
+  grid-area: a5;
+}
+.cell:nth-child(7) {
+  grid-area: a6;
+}
+.cell:nth-child(8) {
+  grid-area: a7;
+}
+.cell:nth-child(9) {
+  grid-area: a8;
+}
+.cell:nth-child(10) {
+  grid-area: a9;
+}
+.cell:nth-child(11) {
+  grid-area: a10;
+}
+.cell:nth-child(12) {
+  grid-area: a11;
+}
+.cell:nth-child(13) {
+  grid-area: a12;
+}
+.cell:nth-child(14) {
+  grid-area: a13;
+}
+.cell:nth-child(15) {
+  grid-area: a14;
+}
+.cell:nth-child(16) {
+  grid-area: a15;
+}
+.cell:nth-child(17) {
+  grid-area: a16;
+}
+.cell:nth-child(18) {
+  grid-area: a17;
+}
+.cell:nth-child(19) {
+  grid-area: a18;
+}
+.cell:nth-child(20) {
+  grid-area: a19;
+}
+.cell:nth-child(21) {
+  grid-area: a20;
+}
+.cell:nth-child(22) {
+  grid-area: a21;
+}
+.cell:nth-child(23) {
+  grid-area: a22;
+}
+.cell:nth-child(24) {
+  grid-area: a23;
+}
