@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import "./tailwind.css";
 
 const initialBoard = Array(24).fill(0); // 24 valid positions on the board
 const horizontalMillPatterns = [
@@ -23,10 +24,7 @@ const verticalMillPatterns = [
   [2, 14, 23],
 ];
 
-const millPatterns = [
-  ...horizontalMillPatterns,
-  ...verticalMillPatterns,
-];
+const millPatterns = [...horizontalMillPatterns, ...verticalMillPatterns];
 
 const adjacency = {
   0: [1, 9],
@@ -47,30 +45,43 @@ const adjacency = {
   15: [11, 16],
   16: [15, 17, 19],
   17: [12, 16],
-  18: [15,21],
-  19: [16,18, 20, 22],
-  20: [17,23],
-  21: [9,18,22],
-  22: [19,21,23],
-  23: [14,20,22],
+  18: [10, 19],
+  19: [16, 18, 20, 22],
+  20: [13, 19],
+  21: [9, 22],
+  22: [19, 21, 23],
+  23: [14, 22],
 };
-
+const placementGraph = [
+  [0, "-", "-", "-", "-", "-", 1, "-", "-", "-", "-", "-", 2],
+  ["|", null, null, null, null, null, "|", null, null, null, null, null, "|"],
+  ["|", null, 3, "-", "-", "-", 4, "-", "-", "-", 5, null, "|"],
+  ["|", null, "|", null, null, null, "|", null, null, null, "|", null, "|"],
+  ["|", null, "|", null, 6, "-", 7, "-", 8, null, "|", null, "|"],
+  ["|", null, "|", null, "|", null, null, null, "|", null, "|", null, "|"],
+  [9, "-", 10, "-", 11, null, null,null, 12, "-", 13, "-", 14],
+  ["|", null, "|", null, "|", null, null,null, "|", null, "|", null, "|"],
+  ["|", null, "|", null, 15, "-", 16, "-", 17, null, "|", null, "|"],
+  ["|", null, "|", null, null, null, "|", null, null, null, "|", null, "|"],
+  ["|", null, 18, "-", "-", "-", 19, "-", "-", "-", 20, null, "|"],
+  ["|", null, null, null, null, null, "|", null, null, null, null, null, "|"],
+  [21, "-", "-", "-", "-", "-", 22, "-", "-", "-", "-", "-", 23],
+];
 // Graphize the board with adjacency data for rendering
 const graphized = (board) => {
-  const graph = [
-    [0, null, null, 1, null, null, 2],
-    [null, 3, null, 4, null, 5, null],
-    [null, null, 6, 7, 8, null, null],
-    [9, 10, 11, null, 12, 13, 14],
-    [null, null, 15, 16, 17, null, null],
-    [null, 18, null, 19, null, 20, null],
-    [21, null, null, 22, null, null, 23],
-  ];
-  return graph.map((row) =>
-    row.map((cell) => ({ index: cell, cell: cell == null ? 0 : board[cell] }))
+  return placementGraph.map((row) =>
+    row.map((cell) => ({
+      index: !Number.isInteger(cell) ? null : cell,
+      cell: !Number.isInteger(cell) ? 0 : board[cell],
+    }))
   );
 };
-
+const Dash = () => {
+  return <div className="w-full h-2 graphic-line"></div>;
+};
+const Pipe = () => {
+  return <div className="w-2 h-full graphic-line"></div>;
+};
 function App() {
   const [board, setBoard] = useState(initialBoard);
   const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -88,7 +99,7 @@ function App() {
     const __playerPieces = {
       ...playerPieces,
       [currentPlayer]: playerPieces[currentPlayer] - 1,
-    }
+    };
     setPlayerPieces(__playerPieces);
     setBoard(newBoard);
 
@@ -125,7 +136,7 @@ function App() {
         } else {
           switchPlayer();
         }
-      }else{
+      } else {
         setSelectedPiece(null);
       }
     }
@@ -137,25 +148,27 @@ function App() {
       newBoard[index] = 0;
       setBoard(newBoard);
 
-      if (newBoard.filter((piece) => piece === 3 - currentPlayer).length < 3 && playerPieces[3 - currentPlayer] === 0) {
+      if (
+        newBoard.filter((piece) => piece === 3 - currentPlayer).length < 3 &&
+        playerPieces[3 - currentPlayer] === 0
+      ) {
         setMessage(`Player ${currentPlayer} wins!`);
         setPhase(0); // Game over
       } else {
         setPhase(playerPieces[1] === 0 && playerPieces[2] === 0 ? 2 : 1);
-        switchPlayer();        
+        switchPlayer();
       }
     }
   };
 
   const handleClick = (index) => {
-    console.log('phase', phase)
+    console.log("phase", phase);
     if (phase === 1) {
       handlePlacePiece(index);
     } else if (phase === 2) {
-      console.log('moving')
+      console.log("moving");
       handleMovePiece(index);
-    } 
-    else if (phase === -1) {
+    } else if (phase === -1) {
       handleRemovePiece(index);
     }
   };
@@ -188,30 +201,62 @@ function App() {
       <p>{message}</p>
       <div className="board">
         {graphizedBoard.map((row, row_index) => (
-          <div className="row" key={row_index}>
+          <div className="row" key={row_index * 49}>
             {row.map(({ cell, index }, col_index) => (
               <button
-                type="button" 
+                type="button"
                 key={row_index * 7 + col_index}
                 className={`cell ${
-                  index == null ? "blank" : ["unocc", "player1", "player2"][cell]
+                  index == null
+                    ? "blank"
+                    : ["unocc", "player1", "player2"][cell]
                 }`}
                 onClick={() => handleClick(index)}
               >
-                {  cell == null ? "blank" : ["", "X", "O"][cell]}
+                {index == null &&
+                  { "-": <Dash />, "|": <Pipe /> }[
+                    placementGraph?.[row_index]?.[col_index]
+                  ]}
+                {cell == null ? "blank" : ["", "X", "O"][cell]}
               </button>
             ))}
           </div>
         ))}
       </div>
       <div className="remaining-pieces">
-        <p>Player 1: {playerPieces[1]} pieces left</p>
-        <p>Player 2: {playerPieces[2]} pieces left</p>
+        {playerPieces[1] > 0 ? (
+          <div className="flex d-center">
+            1-X:{" "}
+            {Array(playerPieces[1])
+              .fill(0)
+              .map((e, i) => (
+                <div
+                  key={i}
+                  className={`flex bg-red-500 w-5 h-5 rounded-full`}
+                ></div>
+              ))}
+          </div>
+        ) : (
+          <div className="phase-2">No pieces for Player -2</div>
+        )}
+        {playerPieces[2] > 0 ? (
+          <div className="flex d-center">
+            2-O:{" "}
+            {Array(playerPieces[2])
+              .fill(0)
+              .map((e, i) => (
+                <div
+                  key={i}
+                  className={`flex bg-blue-500 w-5 h-5 rounded-full`}
+                ></div>
+              ))}
+          </div>
+        ) : (
+          <div className="phase-2">No pieces for Player -1</div>
+        )}
       </div>
       <div className="selected-piece">
-        {selectedPiece !== null && (
-          <p>Selected piece: {selectedPiece}</p>
-        )}
+        {selectedPiece !== null && <p>Selected piece: {selectedPiece}</p>}
       </div>
     </div>
   );
