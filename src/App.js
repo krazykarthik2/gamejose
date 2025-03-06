@@ -86,7 +86,7 @@ function App() {
   const [board, setBoard] = useState(initialBoard);
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [phase, setPhase] = useState(1); // 1: Placing, 2: Moving, 3: Flying
-  const [playerPieces, setPlayerPieces] = useState({ 1: 9, 2: 9 });
+  const [playerPieces, setPlayerPieces] = useState({ 1: 11, 2:11 });
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [message, setMessage] = useState("Player 1: Place a piece");
 
